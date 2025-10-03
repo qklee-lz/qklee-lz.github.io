@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Academic Homepage · Your Name</title>
+  <!-- Tailwind (optional, for quick clean styles) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- TopoJSON -> GeoJSON converter -->
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+  <style>
+    /* Leaflet container height */
+    #worldmap { height: 520px; }
+    .leaflet-container { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial; }
+    .country-fill { stroke: #64748b; stroke-width: 0.5; }
+    .legend i { width: 12px; height: 12px; display: inline-block; margin-right: 6px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <!-- Header -->
+  <header class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold">Your Name</h1>
+        <p class="text-slate-600">Researcher · Human-centered AI, Medical Imaging, Optimization</p>
+        <div class="mt-2 flex flex-wrap gap-3 text-slate-600">
+          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="#" target="_blank" rel="noreferrer"><i class="ri-mail-line"></i>Email</a>
+          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="#" target="_blank" rel="noreferrer"><i class="ri-graduation-cap-line"></i>Google Scholar</a>
+          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="#" target="_blank" rel="noreferrer"><i class="ri-github-line"></i>GitHub</a>
+          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="#" target="_blank" rel="noreferrer"><i class="ri-id-card-line"></i>CV</a>
+        </div>
+      </div>
+      <img alt="avatar" class="w-24 h-24 rounded-2xl object-cover shadow" src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" />
+    </div>
+  </header>
+
+  <!-- About & Map section -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 pb-16">
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div class="bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-3">About</h2>
+        <p class="leading-7 text-slate-700">
+          Write a short bio here (2–4 lines). Mention your current position, research interests,
+          and a sentence about your recent highlights. Keep it concise and friendly.
+        </p>
+        <ul class="list-disc pl-5 mt-4 space-y-2 text-slate-700">
+          <li>Research interests: medical imaging, video understanding, optimization</li>
+          <li>Highlights: Best/Top-1 @ Challenge, major grants, open-source libs</li>
+          <li>Currently: building robust & interpretable clinical AI</li>
+        </ul>
+      </div>
+      <div class="bg-white p-0 rounded-2xl shadow-sm overflow-hidden">
+        <div class="p-4 pb-2 flex items-center justify-between">
+          <h2 class="text-xl font-semibold">My Footprints · 世界足迹</h2>
+          <div class="text-sm text-slate-500">点击国家/点查看详情</div>
+        </div>
+        <div id="worldmap"></div>
+        <div class="p-4 flex items-center justify-between text-sm">
+          <div class="legend space-x-3">
+            <span><i style="background:#0ea5e9"></i>Visited</span>
+            <span><i style="background:#67e8f9"></i>Lived/Work</span>
+            <span><i style="background:#cbd5e1"></i>Others</span>
+          </div>
+          <button id="fitBtn" class="px-3 py-1.5 rounded-md bg-slate-900 text-white hover:bg-slate-700">Fit to Footprints</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Publications (placeholder) -->
+    <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+      <h2 class="text-xl font-semibold mb-4">Selected Publications</h2>
+      <ol class="space-y-3 list-decimal pl-5">
+        <li><strong>Paper Title.</strong> Venue, Year. <a class="text-sky-600 hover:underline" href="#">[PDF]</a> <a class="text-sky-600 hover:underline" href="#">[Code]</a></li>
+        <li><strong>Paper Title.</strong> Venue, Year. <a class="text-sky-600 hover:underline" href="#">[PDF]</a> <a class="text-sky-600 hover:underline" href="#">[Code]</a></li>
+      </ol>
+    </section>
+  </main>
+
+  <script>
+    // ====== CONFIG: customize here ======
+    // Countries you have visited: use ISO3 codes (e.g., 'CHN', 'JPN', 'USA').
+    const visitedCountries = new Set(['JPN','CHN','SGP','CAN']);
+    // Countries you have lived/worked in (ISO3)
+    const livedCountries = new Set(['JPN']);
+
+    // Footprint points (cities / institutions). Add as many as you like.
+    // Each item: { name, coords: [lat, lng], date, note }
+    const footprintPoints = [
+      { name: 'Tokyo, Japan', coords: [35.681, 139.767], date: '2023–', note: 'Current base' },
+      { name: 'Hefei, China', coords: [31.820, 117.229], date: '2018–2022', note: 'Research collaboration' },
+      { name: 'Montreal, Canada', coords: [45.501, -73.567], date: '2021', note: 'Mila/Research visit' },
+      { name: 'Singapore', coords: [1.3521, 103.8198], date: '2024', note: 'Talk/Collaboration' },
+    ];
+
+    // Optional: connect points in order as a polyline (your travel path)
+    const drawPolyline = true;
+    // ====== END CONFIG ======
+
+    // Initialize map
+    const map = L.map('worldmap', { worldCopyJump: true, minZoom: 2 });
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Load world countries TopoJSON (110m)
+    const WORLD_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+
+    // Color function for countries
+    function countryStyle(feature) {
+      const iso3 = feature.properties.iso_a3;
+      let fill = '#e2e8f0';
+      if (visitedCountries.has(iso3)) fill = '#0ea5e9';
+      if (livedCountries.has(iso3)) fill = '#67e8f9';
+      return {
+        className: 'country-fill',
+        fillColor: fill,
+        fillOpacity: 0.8,
+        color: '#64748b',
+        weight: 0.5
+      };
+    }
+
+    function onEachCountry(feature, layer) {
+      const iso3 = feature.properties.iso_a3;
+      const name = feature.properties.name;
+      const tags = [
+        livedCountries.has(iso3) ? 'Lived/Work' : null,
+        visitedCountries.has(iso3) ? 'Visited' : null
+      ].filter(Boolean).join(', ');
+      layer.bindTooltip(tags ? `${name} — ${tags}` : name);
+    }
+
+    // Fetch and render countries
+    fetch(WORLD_URL)
+      .then(r => r.json())
+      .then(topo => {
+        const countries = topojson.feature(topo, topo.objects.countries);
+        const geo = L.geoJSON(countries, { style: countryStyle, onEachFeature: onEachCountry }).addTo(map);
+
+        // Plot footprint points
+        const markers = footprintPoints.map(p => {
+          const marker = L.circleMarker(p.coords, { radius: 6, weight: 1, color: '#0f172a', fillColor: '#fbbf24', fillOpacity: 0.9 });
+          marker.bindPopup(`<strong>${p.name}</strong><br/>${p.date || ''}${p.note ? `<br/>${p.note}` : ''}`);
+          marker.addTo(map);
+          return marker;
+        });
+
+        // Optional: connect the footprint points
+        if (drawPolyline && footprintPoints.length > 1) {
+          const latlngs = footprintPoints.map(p => p.coords);
+          L.polyline(latlngs, { weight: 2, opacity: 0.8 }).addTo(map);
+        }
+
+        // Fit map to visited countries + markers
+        const fitBtn = document.getElementById('fitBtn');
+        const allBounds = [];
+        geo.eachLayer(layer => allBounds.push(layer.getBounds()));
+        markers.forEach(m => allBounds.push(m.getBounds ? m.getBounds() : L.latLngBounds(m.getLatLng(), m.getLatLng())));
+        fitBtn.addEventListener('click', () => {
+          if (allBounds.length) {
+            const merged = allBounds.reduce((acc, b) => acc.extend(b), L.latLngBounds());
+            map.fitBounds(merged.pad(0.08));
+          } else {
+            map.setView([20, 0], 2);
+          }
+        });
+
+        // Initial view
+        if (footprintPoints.length) {
+          const bounds = L.latLngBounds(footprintPoints.map(p => p.coords));
+          map.fitBounds(bounds.pad(0.5));
+        } else {
+          map.setView([20, 0], 2);
+        }
+      });
+  </script>
+</body>
+</html>
