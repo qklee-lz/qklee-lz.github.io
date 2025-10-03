@@ -3,181 +3,313 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Academic Homepage · Your Name</title>
-  <!-- Tailwind (optional, for quick clean styles) -->
+  <title>李乾坤 · Academic Homepage / 个人主页</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <!-- TopoJSON -> GeoJSON converter -->
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
-  <!-- Icons -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
   <style>
-    /* Leaflet container height */
     #worldmap { height: 520px; }
-    .leaflet-container { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial; }
     .country-fill { stroke: #64748b; stroke-width: 0.5; }
-    .legend i { width: 12px; height: 12px; display: inline-block; margin-right: 6px; }
+    .lang{display:none}
+    .lang.active{display:block}
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
-  <!-- Header -->
-  <header class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <header class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-bold">Your Name</h1>
-        <p class="text-slate-600">Researcher · Human-centered AI, Medical Imaging, Optimization</p>
-        <div class="mt-2 flex flex-wrap gap-3 text-slate-600">
-          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="#" target="_blank" rel="noreferrer"><i class="ri-mail-line"></i>Email</a>
-          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="#" target="_blank" rel="noreferrer"><i class="ri-graduation-cap-line"></i>Google Scholar</a>
-          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="#" target="_blank" rel="noreferrer"><i class="ri-github-line"></i>GitHub</a>
-          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="#" target="_blank" rel="noreferrer"><i class="ri-id-card-line"></i>CV</a>
+        <h1 class="text-3xl font-bold">李乾坤 <span class="text-slate-400">/</span> Qiankun Li</h1>
+        <div class="mt-2 flex flex-wrap gap-3 text-slate-700">
+          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="mailto:qklee.lz@gmail.com"><i class="ri-mail-line"></i>qklee.lz@gmail.com</a>
+          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="https://scholar.google.com/citations?user=261SHtIAAAAJ&hl=en" target="_blank" rel="noreferrer"><i class="ri-graduation-cap-line"></i>Google Scholar</a>
+          <a class="inline-flex items-center gap-1 hover:text-slate-900" href="https://github.com/qklee-lz" target="_blank" rel="noreferrer"><i class="ri-github-line"></i>GitHub</a>
+          <!-- 可加：ORCID / LinkedIn / X -->
         </div>
       </div>
-      <img alt="avatar" class="w-24 h-24 rounded-2xl object-cover shadow" src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" />
+      <div class="flex items-center gap-3">
+        <button id="btn-zh" class="px-3 py-1.5 rounded-md bg-slate-900 text-white hover:bg-slate-700">中文</button>
+        <button id="btn-en" class="px-3 py-1.5 rounded-md bg-white text-slate-900 border">English</button>
+      </div>
     </div>
   </header>
 
-  <!-- About & Map section -->
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 pb-16">
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-      <div class="bg-white p-6 rounded-2xl shadow-sm">
-        <h2 class="text-xl font-semibold mb-3">About</h2>
-        <p class="leading-7 text-slate-700">
-          Write a short bio here (2–4 lines). Mention your current position, research interests,
-          and a sentence about your recent highlights. Keep it concise and friendly.
-        </p>
-        <ul class="list-disc pl-5 mt-4 space-y-2 text-slate-700">
-          <li>Research interests: medical imaging, video understanding, optimization</li>
-          <li>Highlights: Best/Top-1 @ Challenge, major grants, open-source libs</li>
-          <li>Currently: building robust & interpretable clinical AI</li>
-        </ul>
-      </div>
-      <div class="bg-white p-0 rounded-2xl shadow-sm overflow-hidden">
-        <div class="p-4 pb-2 flex items-center justify-between">
-          <h2 class="text-xl font-semibold">My Footprints · 世界足迹</h2>
-          <div class="text-sm text-slate-500">点击国家/点查看详情</div>
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
+    <!-- ===== 中文版 ===== -->
+    <section id="lang-zh" class="lang active">
+      <!-- About + Map -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div class="bg-white p-6 rounded-2xl shadow-sm">
+          <h2 class="text-xl font-semibold mb-3">简介</h2>
+          <p class="leading-7">南洋理工大学 计算机学院 人工智能 研究员（Research Fellow）。研究方向：以人为本的人工智能（AI for Health、AI安全）、多模态大模型、视频理解、医疗影像。</p>
         </div>
-        <div id="worldmap"></div>
-        <div class="p-4 flex items-center justify-between text-sm">
-          <div class="legend space-x-3">
-            <span><i style="background:#0ea5e9"></i>Visited</span>
-            <span><i style="background:#67e8f9"></i>Lived/Work</span>
-            <span><i style="background:#cbd5e1"></i>Others</span>
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-4 pb-2 flex items-center justify-between"><h2 class="text-xl font-semibold">我的足迹 · 世界地图</h2><div class="text-sm text-slate-500">点击国家/点查看详情</div></div>
+          <div id="worldmap"></div>
+          <div class="p-4 flex items-center justify-between text-sm">
+            <div class="space-x-3"><span class="inline-flex items-center gap-2"><i class="inline-block w-3 h-3" style="background:#0ea5e9"></i>到访</span><span class="inline-flex items-center gap-2"><i class="inline-block w-3 h-3" style="background:#67e8f9"></i>居住/工作</span></div>
+            <button id="fitBtn" class="px-3 py-1.5 rounded-md bg-slate-900 text-white hover:bg-slate-700">自动适配范围</button>
           </div>
-          <button id="fitBtn" class="px-3 py-1.5 rounded-md bg-slate-900 text-white hover:bg-slate-700">Fit to Footprints</button>
         </div>
-      </div>
+      </section>
+
+      <!-- Research Experience -->
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-graduation-cap-line mr-2"></i>科研经历</h2>
+        <ul class="space-y-3 list-disc pl-5">
+          <li><strong>南洋理工大学 · 计算机学院 · 人工智能 · 研究员（Research Fellow）</strong>（2025/09–至今） — 研究领域：以人为本AI（AI for Health、AI安全、多模态大模型、视频理解）；PI：刘杨 教授。</li>
+          <li><strong>中国科学技术大学 · 模式识别与智能系统 · 硕博连读</strong>（2020/09–2025/06）— 获中科大“郭永怀”奖学金、中科院“院长奖”；NERC-SLIP国家工程研究中心；导师：汪增福 教授。</li>
+        </ul>
+      </section>
+
+      <!-- Publications (full list as provided) -->
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-file-text-line mr-2"></i>论文成果（第一/通讯作者）</h2>
+        <p>共发表论文30篇，一作或通讯21篇（SCI一区6篇，二区2篇，CCF-A 10篇，CCF-B 3篇）。部分如下：</p>
+        <ol class="space-y-3 list-decimal pl-5 mt-4 text-[15px] leading-7">
+          <li><strong>Fuzzy-ViT: A Deep Neuro-Fuzzy System for Cross-Domain Transfer Learning from Large-scale General Data to Medical Image</strong> — <em>IEEE Transactions on Fuzzy Systems (T-FS), 2024</em>（IF 11.9，一区）. <em>Qiankun Li</em>, Yimou Wang, Yani Zhang, Zhaoyu Zuo, Junxin Chen*, Wei Wang.</li>
+          <li><strong>PGA-Net: Polynomial Global Attention Network with Mean Curvature Loss for Lane Detection</strong> — <em>IEEE T-ITS, 2023</em>（IF 8.5，一区）. <em>Qiankun Li</em>, Xianwang Yu, Junxin Chen*, Ben-Guo He, Wei Wang, Danda B. Rawat, Zhihan Lyu.</li>
+          <li><strong>Embracing Large Natural Data: Enhancing Medical Image Analysis via Cross-domain Fine-tuning</strong> — <em>IEEE JBHI, 2023</em>（IF 7.7，一区）. <em>Qiankun Li</em>, Xiaolong Huang, Bo Fang, Huabao Chen, Siyuan Ding, Xu Liu*.</li>
+          <li><strong>Oral Multi-Pathology Segmentation with Lead-Assisting Backbone Attention Network and Synthetic Data Generation</strong> — <em>Information Fusion, 2025</em>（IF 15.7，一区）. <em>Qiankun Li</em>, Huabao Chen, Xiaolong Huang, Mengting He, Xin Ning*, Gang Wang, Feng He.</li>
+          <li><strong>BeautyDiffusion: Generative Latent Decomposition for Makeup Transfer via Diffusion Models</strong> — <em>Information Fusion, 2025</em>. Feng He, Hanlin Li, Xin Ning*, <em>Qiankun Li*</em>.</li>
+          <li><strong>Decoding text from electroencephalography signals: A novel Hierarchical GRU with Masked Residual Attention</strong> — <em>EAAI, 2024</em>（IF 7.5，一区）. Qiupu Chen, Yimou Wang Li, Fenmei Wang, Duolin Sun, <em>Qiankun Li*</em>.</li>
+          <li><strong>Unleashing Foundation Vision Models: Adaptive Transfer for Diverse Data-Limited Scientific Domains</strong> — <em>NeurIPS, 2025</em>. <em>Qiankun Li</em>, Feng He, Huabao Chen, Xin Ning, Kun Wang*, Zengfu Wang*.</li>
+          <li><strong>From Pixels to Views: Learning Angular-Aware and Physics-Consistent Representations for Light Field Microscopy</strong> — <em>NeurIPS, 2025</em>. Feng He, Tanguo Dong, <em>Qiankun Li*</em>, Quan Wen*, Jun Yu*.</li>
+          <li><strong>Data-Efficient Masked Video Modeling for Self-supervised Action Recognition</strong> — <em>ACM MM, 2023</em>. <em>Qiankun Li</em>, Xiaolong Huang, Zhifan Wan, Lanqing Hu, Shuzhe Wu, Jie Zhang, Shiguang Shan, Zengfu Wang*.</li>
+          <li><strong>Advancing Micro-Action Recognition with Multi-Auxiliary Heads and Hybrid Loss Optimization</strong> — <em>ACM MM, 2024, Oral</em>. <em>Qiankun Li</em>, Xiaolong Huang, Huabao Chen, Feng He, Qiupu Chen, Zengfu Wang*.</li>
+          <li><strong>Progressive Large-Scale Modeling via Temporal-Spatial Focus Connector for Micro-Action Recognition</strong> — <em>ACM MM, 2025, Oral</em>. <em>Qiankun Li</em>, Qiupu Chen*, Huabao Chen, Feng He, Depeng Li, Zhigang Zeng*.</li>
+          <li><strong>One Step Learning, One Step Review</strong> — <em>AAAI, 2024</em>. Xiaolong Huang, <em>Qiankun Li*</em>, Xueran Li, Xuesong Gao.</li>
+          <li><strong>PnP-AE: A Plug-and-Play Module for Volumetric Medical Image Segmentation</strong> — <em>BIBM, 2023, Oral (CCF-B)</em>. <em>Qiankun Li</em>, Bo Fang, Yani Zhang, Yongyong Chen, Junxin Chen*.</li>
+          <li><strong>Enhancing Comprehension and Perception in Traffic Scenarios via Task Decoupling and Large Models</strong> — <em>CVPR 2023 Workshop (CCF-A)</em>. Xiaolong Huang, <em>Qiankun Li*</em>.</li>
+          <li><strong>Mitigating Context Bias in Action Recognition via Skeleton-Dominated Two-Stream Network</strong> — <em>ACM MM 2023 Workshop, Oral, Best Student Paper Award</em>. <em>Qiankun Li</em>, Xiaolong Huang, Yuwen Luo, Xiaoyu Hu, Xinyu Sun, Zengfu Wang*.</li>
+          <li><strong>除上述已出版，在投一作论文7篇</strong>（<em>T-PAMI、T-IP、PR、ICLR 2026×4</em>等）。</li>
+        </ol>
+      </section>
+
+      <!-- Grants -->
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-money-cny-circle-line mr-2"></i>基金项目</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>安徽省投中国科大双创基金（已结项，获优秀项目），NO：XY2023S007，经费：30万元，<strong>主持</strong></li>
+          <li>中国科学院战略性先导科技专项（已结项），NO：XDC08000000，经费：3498万元，<strong>参与</strong></li>
+        </ul>
+      </section>
+
+      <!-- Patents -->
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-copyright-line mr-2"></i>国家专利</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>一种基于电磁弹射的投掷救援机器人 — CN110370300A，第一发明人，发明专利</li>
+          <li>基于深度学习的口腔全景X射线图像多病理实例分割方法 — 2024108454773，第一发明人，发明专利</li>
+          <li>一种用于3D体积医学图像分割的特征升维方法 — 2024110520896，第一发明人，发明专利</li>
+          <li>一种基于深度学习的口腔全景X射线图像牙齿分割方法 — 2024113362818，第一发明人，发明专利</li>
+          <li>基于深度学习的3D体积医学图像多器官实例分割方法 — 2024109200026，第一发明人，发明专利</li>
+        </ul>
+      </section>
+
+      <!-- Competitions -->
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-shield-star-line mr-2"></i>竞赛经历</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>ACM MM 2024 Grand Challenge 视频微动作识别 — 2024 国际冠军</li>
+          <li>IFlyTEK2024 细粒度叶片识别 — 2024 国际冠军</li>
+          <li>ICCV OOD-CV 自监督 — 2023 国际亚军</li>
+          <li>ECCV Google x Embedding 图像特征嵌入 — 2022 国际亚军</li>
+          <li>ICCV OOD-CV 分类 — 2023 国际季军</li>
+          <li>ACM MM AMC-SME 智能多媒体工业制造 — 2023 Best Student Paper Award</li>
+          <li>CVPR WFM 大模型挑战赛 — 2023 国际季军/第五</li>
+          <li>世界杯RoboCup中国机器人大赛（Storing Groceries、Restaurant）— 2018 国家双料冠军</li>
+          <li>中国服务机器人大赛（泡茶机器人、家庭服务机器人）— 2018 国家季军、国家一等奖</li>
+          <li>星火杯、CCF计算智能、中国智能制造、西门子杯、全国电设、数模、华为杯、互联网+ 等 — 2017–2024 国家一/二/三等奖若干</li>
+        </ul>
+      </section>
+
+      <!-- Awards -->
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-trophy-line mr-2"></i>获奖情况</h2>
+        <p>中国科大“郭永怀”奖学金（2025），中科院“院长奖”（2025），本科生国家奖学金（2018、2019），博士生国家奖学金（2023、2024），宝钢奖学金（2020），中科院悦群特等奖学金（2022、2024），华瑜基金（2024）等。</p>
+      </section>
+
+      <!-- Service -->
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-team-line mr-2"></i>学术服务</h2>
+        <p><strong>期刊审稿人：</strong> IEEE TIP, IEEE TMM, IEEE T-CSVT, IEEE JBHI, Pattern Recognition, Information Fusion, Neural Networks, EAAI, ESWA, NCAA, Nature NPJ, Science Advances 等。</p>
+        <p class="mt-2"><strong>会议审稿人/程序委员：</strong> CVPR, ICCV, ECCV, ICML, ICLR, NeurIPS, AAAI, ACM MM, IJCAI, ACL, ICASSP, ICME 等。</p>
+      </section>
+
+      <!-- Work Experience -->
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-briefcase-4-line mr-2"></i>工作经历</h2>
+        <ul class="list-disc pl-5 space-y-3">
+          <li><strong>医工交叉合作单位</strong>（2022/09–至今）：国家癌症中心、中国医学科学院北京协和、中科院健康所、中科院合肥肿瘤医院、北部战区总院、陆军军医医院、中国医科大学、安徽医科大学、安徽省立医院。<br/>涵盖：肿瘤、口腔、心脏、脑部、胃部、肝脏、足部、新冠、心理学；模式：CT、MRI、X-ray、RGB、红外、病理切片、结构化数据、文本。</li>
+          <li><strong>中科院计算所 VIPL实验室（山世光组） 客座生</strong>（2021/09–2022/09）：<br/>负责中科院-上汽集团自动驾驶车道线检测项目（已落地交付）；负责中科院-华为可泛化视频行为识别项目（A类论文，智慧物流应用）。</li>
+          <li><strong>Megvii旷视科技 · AI算法 实习生</strong>（2021/03–2021/09）：<br/>完成安全类伪造防护鉴别大项目（3期，开发/集成/打包/部署）；完成与江西省政府合作的智慧安防项目（硬件流设备搭建、算法研发与部署）。</li>
+        </ul>
+      </section>
     </section>
 
-    <!-- Publications (placeholder) -->
-    <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
-      <h2 class="text-xl font-semibold mb-4">Selected Publications</h2>
-      <ol class="space-y-3 list-decimal pl-5">
-        <li><strong>Paper Title.</strong> Venue, Year. <a class="text-sky-600 hover:underline" href="#">[PDF]</a> <a class="text-sky-600 hover:underline" href="#">[Code]</a></li>
-        <li><strong>Paper Title.</strong> Venue, Year. <a class="text-sky-600 hover:underline" href="#">[PDF]</a> <a class="text-sky-600 hover:underline" href="#">[Code]</a></li>
-      </ol>
+    <!-- ===== English ===== -->
+    <section id="lang-en" class="lang">
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div class="bg-white p-6 rounded-2xl shadow-sm">
+          <h2 class="text-xl font-semibold mb-3">About</h2>
+          <p class="leading-7">Research Fellow at the School of Computer Science, Nanyang Technological University. Research interests: Human-centered AI (AI for Health & Safety), multimodal foundation models, video understanding, and medical imaging.</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-4 pb-2 flex items-center justify-between"><h2 class="text-xl font-semibold">Footprints · World Map</h2><div class="text-sm text-slate-500">Click countries/markers for details</div></div>
+          <div id="worldmap-en"></div>
+          <div class="p-4 flex items-center justify-between text-sm">
+            <div class="space-x-3"><span class="inline-flex items-center gap-2"><i class="inline-block w-3 h-3" style="background:#0ea5e9"></i>Visited</span><span class="inline-flex items-center gap-2"><i class="inline-block w-3 h-3" style="background:#67e8f9"></i>Lived/Work</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-graduation-cap-line mr-2"></i>Research Experience</h2>
+        <ul class="space-y-3 list-disc pl-5">
+          <li><strong>Research Fellow, AI, School of Computer Science, NTU</strong> (09/2025–Present) — Human-centered AI (Health & Safety), multimodal LLMs, video understanding; PI: Prof. Yang Liu.</li>
+          <li><strong>Ph.D. (combined M.S./Ph.D.), PRIS, University of Science and Technology of China (USTC)</strong> (09/2020–06/2025) — Awards: USTC Guo Yonghuai Scholarship; CAS President's Award; NERC-SLIP Center; Advisor: Prof. Zengfu Wang.</li>
+        </ul>
+      </section>
+
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-file-text-line mr-2"></i>Publications (First/Corresponding Author)</h2>
+        <ol class="space-y-3 list-decimal pl-5 mt-4 text-[15px] leading-7">
+          <li><strong>Fuzzy-ViT...</strong> — <em>IEEE T-FS, 2024</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>PGA-Net...</strong> — <em>IEEE T-ITS, 2023</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>Embracing Large Natural Data...</strong> — <em>IEEE JBHI, 2023</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>Oral Multi-Pathology Segmentation with LABANet...</strong> — <em>Information Fusion, 2025</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>BeautyDiffusion...</strong> — <em>Information Fusion, 2025</em>. Feng He, Hanlin Li, Xin Ning*, <em>Qiankun Li*</em>.</li>
+          <li><strong>Decoding text from EEG...</strong> — <em>EAAI, 2024</em>. Qiupu Chen, ..., <em>Qiankun Li*</em>.</li>
+          <li><strong>Unleashing Foundation Vision Models...</strong> — <em>NeurIPS, 2025</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>From Pixels to Views...</strong> — <em>NeurIPS, 2025</em>. Feng He, <em>Qiankun Li*</em>, ...</li>
+          <li><strong>Data-Efficient Masked Video Modeling...</strong> — <em>ACM MM, 2023</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>Advancing Micro-Action Recognition...</strong> — <em>ACM MM, 2024, Oral</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>Progressive Large-Scale Modeling via TS-Focus Connector...</strong> — <em>ACM MM, 2025, Oral</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>One Step Learning, One Step Review</strong> — <em>AAAI, 2024</em>. Xiaolong Huang, <em>Qiankun Li*</em>, ...</li>
+          <li><strong>PnP-AE...</strong> — <em>BIBM, 2023, Oral</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>Enhancing Comprehension and Perception in Traffic Scenarios...</strong> — <em>CVPR 2023 Workshop</em>. Xiaolong Huang, <em>Qiankun Li*</em>.</li>
+          <li><strong>Mitigating Context Bias in Action Recognition...</strong> — <em>ACM MM 2023 Workshop, Oral, Best Student Paper Award</em>. <em>Qiankun Li</em>, ...</li>
+          <li><strong>Under Review (7 first-author submissions)</strong> — <em>IEEE T-PAMI, IEEE T-IP, PR, ICLR 2026×4</em>.</li>
+        </ol>
+      </section>
+
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-money-cny-circle-line mr-2"></i>Grants</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>Anhui–USTC Entrepreneurship & Innovation Fund (Completed, Excellent Project), NO: XY2023S007, 300,000 RMB — <strong>PI</strong>.</li>
+          <li>CAS Strategic Priority Research Program (Completed), NO: XDC08000000, 34.98M RMB — <strong>Participant</strong>.</li>
+        </ul>
+      </section>
+
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-copyright-line mr-2"></i>Patents</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>Electromagnetic Catapult-based Throwing Rescue Robot — CN110370300A — First Inventor.</li>
+          <li>Multi-Pathology Instance Segmentation for Panoramic Dental X-rays Based on Deep Learning — 2024108454773 — First Inventor.</li>
+          <li>Feature Dimension Lifting for 3D Volumetric Medical Image Segmentation — 2024110520896 — First Inventor.</li>
+          <li>Tooth Segmentation for Panoramic Dental X-rays Based on Deep Learning — 2024113362818 — First Inventor.</li>
+          <li>Multi-organ Instance Segmentation for 3D Volumetric Medical Images Based on Deep Learning — 2024109200026 — First Inventor.</li>
+        </ul>
+      </section>
+
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-shield-star-line mr-2"></i>Competitions</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>ACM MM 2024 Grand Challenge (Micro-action Recognition) — International Champion</li>
+          <li>IFlyTEK 2024 (Fine-grained Leaf Recognition) — Champion</li>
+          <li>ICCV OOD-CV (Self-supervised) — 2023 Runner-up</li>
+          <li>ECCV Google × Embedding — 2022 Runner-up</li>
+          <li>ICCV OOD-CV (Classification) — 2023 Third Place</li>
+          <li>ACM MM AMC-SME — 2023 Best Student Paper Award</li>
+          <li>CVPR WFM Large Model Challenge — 2023 Third/Fifth</li>
+          <li>RoboCup China (Storing Groceries, Restaurant) — 2018 Double National Champion</li>
+          <li>China Service Robot Competition — 2018 National Third / First Prizes</li>
+          <li>Multiple national awards (2017–2024): Spark Cup, CCF CI, China Intelligent Manufacturing, Siemens Cup, CSDC, MCM, Huawei AI, Internet+ ...</li>
+        </ul>
+      </section>
+
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-trophy-line mr-2"></i>Awards</h2>
+        <p>USTC Guo Yonghuai Scholarship (2025); CAS President's Award (2025); National Scholarship (Undergrad 2018/2019; PhD 2023/2024); Baosteel Scholarship (2020); CAS Yuequn Special Scholarship (2022/2024); Huayu Fund (2024); etc.</p>
+      </section>
+
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-team-line mr-2"></i>Academic Service</h2>
+        <p><strong>Reviewer:</strong> IEEE TIP, TMM, T-CSVT, JBHI, PR, Information Fusion, Neural Networks, EAAI, ESWA, NCAA, Nature NPJ, Science Advances, etc.</p>
+        <p class="mt-2"><strong>PC/Reviewer:</strong> CVPR, ICCV, ECCV, ICML, ICLR, NeurIPS, AAAI, ACM MM, IJCAI, ACL, ICASSP, ICME, etc.</p>
+      </section>
+
+      <section class="mt-10 bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="ri-briefcase-4-line mr-2"></i>Experience</h2>
+        <ul class="list-disc pl-5 space-y-3">
+          <li><strong>Interdisciplinary Med-Engineering Collaborations</strong> (09/2022–Present): National Cancer Center, PUMC, CAS Institutes (Health, Hefei Cancer Hospital), PLA General Hospitals, CMU, AHMU, Anhui Provincial Hospital. Modalities: CT, MRI, X-ray, RGB/IR, pathology WSIs, structured data, clinical text.</li>
+          <li><strong>CAS Institute of Computing Technology · VIPL (Prof. Shiguang Shan)</strong> (09/2021–09/2022): SAIC lane detection project (deployed); Huawei generalizable video action recognition (A-level paper, logistics deployment).</li>
+          <li><strong>Megvii (Face++) · AI Algorithm Intern</strong> (03/2021–09/2021): Anti-spoofing security system (3 phases, dev/integration/packaging/deploy); Smart security with Jiangxi Gov (hardware streaming, detection algorithms).</li>
+        </ul>
+      </section>
     </section>
   </main>
 
-  <script>
-    // ====== CONFIG: customize here ======
-    // Countries you have visited: use ISO3 codes (e.g., 'CHN', 'JPN', 'USA').
-    const visitedCountries = new Set(['JPN','CHN','SGP','CAN']);
-    // Countries you have lived/worked in (ISO3)
-    const livedCountries = new Set(['JPN']);
+  <!-- 简易访问计数（可选）：不蒜子 -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-8 text-sm text-slate-500">
+    <span id="busuanzi_container_site_pv">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次 · </span>
+    <span id="busuanzi_container_site_uv">访客数 <span id="busuanzi_value_site_uv"></span></span>
+  </div>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-    // Footprint points (cities / institutions). Add as many as you like.
-    // Each item: { name, coords: [lat, lng], date, note }
-    const footprintPoints = [
+  <script>
+    // ======= Language Switch =======
+    const zhBtn = document.getElementById('btn-zh');
+    const enBtn = document.getElementById('btn-en');
+    const zhSec = document.getElementById('lang-zh');
+    const enSec = document.getElementById('lang-en');
+    zhBtn.addEventListener('click', ()=>{ zhSec.classList.add('active'); enSec.classList.remove('active'); zhBtn.classList.add('bg-slate-900','text-white'); enBtn.classList.remove('bg-slate-900','text-white'); enBtn.classList.add('bg-white');});
+    enBtn.addEventListener('click', ()=>{ enSec.classList.add('active'); zhSec.classList.remove('active'); enBtn.classList.add('bg-slate-900','text-white'); zhBtn.classList.remove('bg-slate-900','text-white'); zhBtn.classList.add('bg-white');});
+
+    // ======= World Map (shared config; render in both lang blocks) =======
+    const visitedCountries = new Set(['JPN','CHN','SGP','CAN']);
+    const livedCountries   = new Set(['JPN']);
+    const footprintPoints  = [
       { name: 'Tokyo, Japan', coords: [35.681, 139.767], date: '2023–', note: 'Current base' },
       { name: 'Hefei, China', coords: [31.820, 117.229], date: '2018–2022', note: 'Research collaboration' },
       { name: 'Montreal, Canada', coords: [45.501, -73.567], date: '2021', note: 'Mila/Research visit' },
       { name: 'Singapore', coords: [1.3521, 103.8198], date: '2024', note: 'Talk/Collaboration' },
     ];
 
-    // Optional: connect points in order as a polyline (your travel path)
-    const drawPolyline = true;
-    // ====== END CONFIG ======
-
-    // Initialize map
-    const map = L.map('worldmap', { worldCopyJump: true, minZoom: 2 });
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Load world countries TopoJSON (110m)
-    const WORLD_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
-
-    // Color function for countries
-    function countryStyle(feature) {
-      const iso3 = feature.properties.iso_a3;
-      let fill = '#e2e8f0';
-      if (visitedCountries.has(iso3)) fill = '#0ea5e9';
-      if (livedCountries.has(iso3)) fill = '#67e8f9';
-      return {
-        className: 'country-fill',
-        fillColor: fill,
-        fillOpacity: 0.8,
-        color: '#64748b',
-        weight: 0.5
-      };
-    }
-
-    function onEachCountry(feature, layer) {
-      const iso3 = feature.properties.iso_a3;
-      const name = feature.properties.name;
-      const tags = [
-        livedCountries.has(iso3) ? 'Lived/Work' : null,
-        visitedCountries.has(iso3) ? 'Visited' : null
-      ].filter(Boolean).join(', ');
-      layer.bindTooltip(tags ? `${name} — ${tags}` : name);
-    }
-
-    // Fetch and render countries
-    fetch(WORLD_URL)
-      .then(r => r.json())
-      .then(topo => {
+    function bootstrapMap(containerId){
+      const WORLD_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+      const map = L.map(containerId, { worldCopyJump: true, minZoom: 2 });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
+      fetch(WORLD_URL).then(r=>r.json()).then(topo=>{
         const countries = topojson.feature(topo, topo.objects.countries);
-        const geo = L.geoJSON(countries, { style: countryStyle, onEachFeature: onEachCountry }).addTo(map);
-
-        // Plot footprint points
-        const markers = footprintPoints.map(p => {
-          const marker = L.circleMarker(p.coords, { radius: 6, weight: 1, color: '#0f172a', fillColor: '#fbbf24', fillOpacity: 0.9 });
-          marker.bindPopup(`<strong>${p.name}</strong><br/>${p.date || ''}${p.note ? `<br/>${p.note}` : ''}`);
-          marker.addTo(map);
-          return marker;
-        });
-
-        // Optional: connect the footprint points
-        if (drawPolyline && footprintPoints.length > 1) {
-          const latlngs = footprintPoints.map(p => p.coords);
-          L.polyline(latlngs, { weight: 2, opacity: 0.8 }).addTo(map);
+        function style(feature){
+          const iso3 = feature.properties.iso_a3;
+          let fill = '#e2e8f0';
+          if (visitedCountries.has(iso3)) fill = '#0ea5e9';
+          if (livedCountries.has(iso3)) fill = '#67e8f9';
+          return { className:'country-fill', fillColor:fill, fillOpacity:0.8, color:'#64748b', weight:0.5 };
         }
-
-        // Fit map to visited countries + markers
+        function onEach(feature, layer){
+          const iso3 = feature.properties.iso_a3; const name = feature.properties.name;
+          const tags = [livedCountries.has(iso3)?'Lived/Work':null, visitedCountries.has(iso3)?'Visited':null].filter(Boolean).join(', ');
+          layer.bindTooltip(tags?`${name} — ${tags}`:name);
+        }
+        const geo = L.geoJSON(countries, { style, onEachFeature:onEach }).addTo(map);
+        const markers = footprintPoints.map(p=>{ const m=L.circleMarker(p.coords,{radius:6,weight:1,color:'#0f172a',fillColor:'#fbbf24',fillOpacity:0.9}); m.bindPopup(`<strong>${p.name}</strong><br/>${p.date||''}${p.note?`<br/>${p.note}`:''}`); m.addTo(map); return m; });
+        if (footprintPoints.length){ const bounds = L.latLngBounds(footprintPoints.map(p=>p.coords)); map.fitBounds(bounds.pad(0.5)); } else { map.setView([20,0],2); }
         const fitBtn = document.getElementById('fitBtn');
-        const allBounds = [];
-        geo.eachLayer(layer => allBounds.push(layer.getBounds()));
-        markers.forEach(m => allBounds.push(m.getBounds ? m.getBounds() : L.latLngBounds(m.getLatLng(), m.getLatLng())));
-        fitBtn.addEventListener('click', () => {
-          if (allBounds.length) {
-            const merged = allBounds.reduce((acc, b) => acc.extend(b), L.latLngBounds());
-            map.fitBounds(merged.pad(0.08));
-          } else {
-            map.setView([20, 0], 2);
-          }
-        });
-
-        // Initial view
-        if (footprintPoints.length) {
-          const bounds = L.latLngBounds(footprintPoints.map(p => p.coords));
-          map.fitBounds(bounds.pad(0.5));
-        } else {
-          map.setView([20, 0], 2);
+        if (fitBtn && containerId==='worldmap'){
+          const all = []; geo.eachLayer(l=>all.push(l.getBounds())); markers.forEach(m=>all.push(m.getBounds?m.getBounds():L.latLngBounds(m.getLatLng(),m.getLatLng())));
+          fitBtn.addEventListener('click', ()=>{ const merged = all.reduce((acc,b)=>acc.extend(b), L.latLngBounds()); map.fitBounds(merged.pad(0.08)); });
         }
       });
+      return map;
+    }
+    // Mount maps in both languages
+    bootstrapMap('worldmap');
+    bootstrapMap('worldmap-en');
   </script>
 </body>
 </html>
