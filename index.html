@@ -32,10 +32,10 @@
             width: auto;
             /* height: 120px; */
             height: 275px;
-            border-radius: 0; /* 方形头像 */
+            border-radius: 0;
             object-fit: contain;
             margin-right: 30px;
-            background-color: #eee; /* 占位色 */
+            background-color: #eee;
         }
         .header-info h1 {
             margin: 0 0 10px 0;
@@ -45,11 +45,93 @@
         }
         .header-info p { margin: 5px 0; color: #666; }
 
+        /* --- 单位logo美化 --- */
+        .org-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 12px;
+        }
+        .org-logo {
+            width: 80px;
+            height: 32px;
+            object-fit: contain;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .org-logo.ustc-logo {
+            width: 40px;
+            height: 40px;
+            margin-top: 0;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        .org-info {
+            flex: 1;
+            display: block;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .org-info .advisor-link {
+            white-space: nowrap;
+        }
+        .org-award {
+            display: block;
+            margin-top: 6px;
+            margin-left: -90px;
+            color: #e141a1;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .org-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .org-logo,
+            .org-logo.ustc-logo {
+                margin-top: 0;
+            }
+            .org-info .advisor-link {
+                white-space: normal;
+            }
+        }
+
+        /* --- 单位logo背景叠加 --- */
+        .org-bg {
+            position: relative;
+            padding: 16px 18px 12px 18px;
+            margin-bottom: 10px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .org-bg-logo {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.13;
+            height: 60px;
+            max-width: 120px;
+            object-fit: contain;
+            pointer-events: none;
+        }
+        .org-bg-content {
+            position: relative;
+            z-index: 1;
+        }
+        @media (max-width: 600px) {
+            .org-bg-logo { height: 36px; max-width: 80px; }
+            .org-bg { padding: 10px 8px 8px 8px; }
+        }
+
         /* --- 章节通用 (Sections) --- */
         section { margin-bottom: 40px; }
         h2 {
             font-size: 1.5rem;
-            border-left: 4px solid #0066cc; /* 左侧蓝条装饰 */
+            border-left: 4px solid #0066cc;
             padding-left: 10px;
             margin-bottom: 20px;
         }
@@ -59,9 +141,9 @@
         .news-item { margin-bottom: 10px; display: flex; }
         .news-date {
             font-weight: bold;
-            min-width: 100px; /* 日期宽度固定，对齐更好看 */
+            min-width: 100px;
             color: #555;
-            font-family: monospace; /* 等宽字体显示日期 */
+            font-family: monospace;
         }
 
         /* --- 论文列表 (Publications) --- */
@@ -86,15 +168,36 @@
         <img src="assets/qklee_uk.jpg" alt="Profile Photo" class="avatar">
         
         <div class="header-info">
-            <h1>Qiankun Li (李乾坤)</h1> 
-            <p>Research Fellow @ Imperial College (IC), 
-            Advisor: <a href="https://scholar.google.co.uk/citations?hl=zh-CN&user=3TeLlQsAAAAJ&view_op=list_works&sortby=pubdate" target="_blank">Anil Bharath</a></p>
-            <p>Research Fellow @ College of Computing and Data Science (CCDS), Nanyang Technological University (NTU),
-            Advisor: <a href="https://scholar.google.com/citations?user=_Pvgwd0AAAAJ&hl=en&oi=ao" target="_blank">Yang Liu</a></p>
-            <p>Ph.D.@ National Engineering Research Center (NERC-SLIP), University of Science and Technology of China (USTC),
-            Advisor: <a href="https://scholar.google.com/citations?user=uDtOVBAAAAAJ&hl=zh-CN&oi=ao" target="_blank">Zengfu Wang</a><br>
-            <span style="color:#e141a1;font-weight:bold;">USTC “Guo Yonghuai” Scholarship (中科大郭永怀奖), CAS President's Award (中科院院长奖), The National Scholarship (国家奖学金) x 4</span></p>
-            <!-- <p>Email: qiankun.li@ntu.edu.sg</p> -->
+            <h1>Qiankun Li (李乾坤)</h1>
+
+            <div class="org-row">
+                <img src="assets/ic.png" alt="Imperial College Logo" class="org-logo">
+                <span class="org-info">
+                    Research Fellow @ Imperial College (IC), Advisor:
+                    <a class="advisor-link" href="https://scholar.google.co.uk/citations?hl=zh-CN&user=3TeLlQsAAAAJ&view_op=list_works&sortby=pubdate" target="_blank">Anil Bharath</a>
+                </span>
+            </div>
+
+            <div class="org-row">
+                <img src="assets/ntu.png" alt="NTU Logo" class="org-logo">
+                <span class="org-info">
+                    Research Fellow @ College of Computing and Data Science (CCDS), Nanyang Technological University (NTU), Advisor:
+                    <a class="advisor-link" href="https://scholar.google.com/citations?user=_Pvgwd0AAAAJ&hl=en&oi=ao" target="_blank">Yang Liu</a>
+                </span>
+            </div>
+
+            <div class="org-row">
+                <img src="assets/ustc.jpg" alt="USTC Logo" class="org-logo ustc-logo">
+                <span class="org-info">
+                    Ph.D. @ National Engineering Research Center (NERC-SLIP), University of Science and Technology of China (USTC), Advisor:
+                    <a class="advisor-link" href="https://scholar.google.com/citations?user=uDtOVBAAAAAJ&hl=zh-CN&oi=ao" target="_blank">Zengfu Wang</a>
+                    <span class="org-award">
+                        USTC “Guo Yonghuai” Scholarship (中科大郭永怀奖), CAS President's Award (中科院院长奖), The National Scholarship (国家奖学金) x 4
+                    </span>
+                </span>
+            </div>
+        <!-- </div> -->
+    <!-- </header> -->
 <p>
     <a href="https://scholar.google.com/citations?user=261SHtIAAAAJ&hl=en&oi=sra"
        target="_blank"
