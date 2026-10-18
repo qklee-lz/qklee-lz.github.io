@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qiankun Li (李乾坤) | Homepage</title>
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/favicon.ico?v=four-star" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -67,6 +67,27 @@
             margin-top: 0;
             margin-left: 20px;
             margin-right: 20px;
+        }
+        .org-row.smart-row {
+            margin-bottom: 16px;
+        }
+        .smart-logo-link {
+            display: block;
+            width: 80px;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+        .smart-logo-link .org-logo {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin-top: 0;
+        }
+        .org-context {
+            display: block;
+            color: #666;
+            font-size: 0.9rem;
+            margin: 2px 0;
         }
         .org-info {
             flex: 1;
@@ -180,10 +201,20 @@
         <div class="header-info">
             <h1>Qiankun Li (李乾坤)</h1>
 
+            <div class="org-row smart-row">
+                <span class="smart-logo-link">
+                    <img src="assets/smart.png" alt="SMART — Singapore-MIT Alliance for Research and Technology" class="org-logo">
+                </span>
+                <span class="org-info">
+                    Research Fellow<a class="org-mail" href="mailto:qiankun.li@smart.mit.edu" title="qiankun.li@smart.mit.edu" aria-label="Email qiankun.li@smart.mit.edu"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+                    @ SMART, MIT, PI: <a class="advisor-link" href="https://scholar.google.com/citations?user=4bHLr_IAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Xuanhe Zhao</a>
+                </span>
+            </div>
+
             <!-- <div class="org-row">
                 <img src="assets/ic.png" alt="Imperial College Logo" class="org-logo">
                 <span class="org-info">
-                    Research Fellow @ Imperial College (IC), Advisor:
+                    Research Fellow @ Imperial College (IC), PI:
                     <a class="advisor-link" href="https://scholar.google.co.uk/citations?hl=zh-CN&user=3TeLlQsAAAAJ&view_op=list_works&sortby=pubdate" target="_blank">Anil Bharath</a>
                 </span>
             </div> -->
@@ -191,7 +222,7 @@
                 <img src="assets/ic.png" alt="Imperial College Logo" class="org-logo">
                 <span class="org-info">
                     Research Fellow<a class="org-mail" href="mailto:q.li2@imperial.ac.uk" title="q.li2@imperial.ac.uk"><i class="fas fa-envelope"></i></a>
-                    @ Imperial College (IC), Advisor:
+                    @ Imperial College (IC), PI:
                     <a class="advisor-link" href="https://scholar.google.co.uk/citations?hl=zh-CN&user=3TeLlQsAAAAJ&view_op=list_works&sortby=pubdate" target="_blank">
                         Anil Bharath
                     </a>
@@ -202,7 +233,7 @@
                 <img src="assets/ntu.png" alt="NTU Logo" class="org-logo">
                 <span class="org-info">
                     Research Fellow<a class="org-mail" href="mailto:cs-qiankun.li@ntu.edu.sg" title="cs-qiankun.li@ntu.edu.sg"><i class="fas fa-envelope"></i></a>
-                    @ College of Computing and Data Science (CCDS), Nanyang Technological University (NTU), Advisor:
+                    @ College of Computing and Data Science (CCDS), Nanyang Technological University (NTU), PI:
                     <a class="advisor-link" href="https://scholar.google.com/citations?user=_Pvgwd0AAAAJ&hl=en&oi=ao" target="_blank">Yang Liu</a>
                 </span>
             </div>
@@ -235,7 +266,7 @@
         [GitHub] 
     </a>
 
-    <a href="mailto:q.li2@imperial.ac.uk"
+    <a href="mailto:qklee.lz@gmail.com"
        style="display:inline-flex;align-items:center;margin-right:12px;">
         <i class="fas fa-envelope" style="font-size:1.1em;margin-right:6px;"></i>
         [Email]
